@@ -1,57 +1,66 @@
-💳 Credit Risk Classification: Predicting Customer Default
-This project demonstrates the development of a predictive machine learning model to assess and classify the credit risk of clients. Using historical payment data, the model predicts the likelihood of a customer defaulting on their next credit card payment. This capability is foundational for financial institutions to manage exposure and mitigate financial loss.
+💳Credit Card Default Prediction Model (Classification Project)
 
-⚙️ Project Overview & Methodology
-The objective was to create a highly interpretable classification model that serves as a robust baseline for credit risk assessment.
-Component,Detail
-Problem Type,Binary Classification
-Dataset,"Default of Credit Card Clients (30,000 records)"
-Goal,Predict whether the client will default on the next payment (dpnm: 1 or 0)
-Algorithm,Logistic Regression
-Key Features,"LIMIT_BAL, AGE, BILL_AMT*, and the critical PAY_* history columns."
-Target Column,"dpnm (Binary: 0: No Default, 1: Default)"
+This project implements a complete Machine Learning pipeline to predict the probability of a credit card customer defaulting on their next payment. The goal is to build a robust classification model that helps financial institutions identify high-risk accounts and reduce financial losses.
 
-🛠️ Steps Performed in the Pipeline
-The final solution utilized a comprehensive scikit-learn Pipeline to ensure all data preparation was consistent and reproducible before model training.
+🛠️ Project Goals & Methodology
 
-Data Cleaning & Feature Engineering:
-The redundant ID column was dropped.
-Categorical features (SEX, EDUCATION, MARRIAGE, PAY_*) were identified for encoding.
+The core objective was to develop a predictive model from raw data to a final, interpretable ML model ready for deployment.
+| Aspect               | Details                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------- |
+| **Problem Type**     | Binary Classification (`default_payment_next_month`: 1 or 0)                                      |
+| **Dataset**          | Default of Credit Card Clients (30,000 records)                                                   |
+| **Model Used**       | Logistic Regression (simple, interpretable baseline)                                              |
+| **Key Deliverables** | Data Cleaning, Feature Engineering, Model Training, Performance Evaluation, Visual Interpretation |
 
-Splitting the Dataset:
-Data was split into 80% training and 20% testing sets using stratified sampling to maintain the original class balance.
+✨ Machine Learning Pipeline
+1. Preprocessing (ColumnTransformer)
+✔ Handling Categorical Features
+Columns like SEX, EDUCATION, and all PAY_* repayment status columns were processed using One-Hot Encoding.
 
-Preprocessing (ColumnTransformer):
-Numerical Features: Features like LIMIT_BAL and BILL_AMT* were scaled using StandardScaler to prevent any single feature from disproportionately influencing the distance-based model calculation.
+✔ Feature Scaling
+High-range numeric features like:
+LIMIT_BAL
+BILL_AMT*
+PAY_AMT*
+were scaled using StandardScaler to normalize values.
 
-Categorical Features: Columns were transformed using One-Hot Encoding to convert them into a numerical format suitable for the Logistic Regression model.
+✔ Imputation
+SimpleImputer was used to handle missing values and maintain pipeline robustness.
 
-Model Building & Training:
-A Logistic Regression classifier was embedded in the final pipeline, ensuring that the model learned patterns from the preprocessed (scaled and encoded) data.
-Metric,Score
-Overall Accuracy,0.817 (81.7%)
-Precision (No Default),0.84
-Recall (No Default),0.95
-Precision (Default),0.66
-Recall (Default),0.35
+2. Model Training
+A scikit-learn Pipeline connected preprocessing to a LogisticRegression classifier.
+Training was performed on 80% of the dataset (X_train, y_train).
 
-Confusion Matrix Insight:
-True \ Predicted,No Default (0),Default (1)
-No Default (0),"4,463 (True Negatives)",210 (False Positives)
-Default (1),860 (False Negatives),467 (True Positives)
+🔬 Performance Evaluation
+The model achieved the following on the test set:
+| Metric                  | Result     | Interpretation                            |
+| ----------------------- | ---------- | ----------------------------------------- |
+| **Accuracy**            | **81.70%** | Overall correctness                       |
+| **Precision (Default)** | **66%**    | When predicting default, 66% were correct |
+| **Recall (Default)**    | **35%**    | Captures 35% of actual defaulters         |
 
-Interpretation
-False Negatives (860): This represents the greatest risk. The model predicted these 860 customers would pay, but they actually defaulted. This directly leads to financial loss, indicating a need for optimization to increase Recall (Default).
+Confusion Matrix Analysis
+|                           | Predicted No Default (0) | Predicted Default (1) |
+| ------------------------- | ------------------------ | --------------------- |
+| **Actual No Default (0)** | 4,463 (True Negatives)   | 210 (False Positives) |
+| **Actual Default (1)**    | 860 (False Negatives)    | 467 (True Positives)  |
 
-Feature Importance: The Logistic Regression model is highly interpretable. Analysis of the coefficients showed that the past payment status columns (PAY_1 through PAY_6) were overwhelmingly the most influential features, proving that historical payment discipline is the primary driver of credit risk.
+Key Insight:
+The 860 False Negatives (actual defaulters predicted as safe) represent the largest business risk.
 
-🚀 Conclusion
-The project successfully built a production-ready pipeline that classifies credit risk with 81.7% accuracy. While the model demonstrates strong predictive power for non-defaulters, the high False Negative count highlights the opportunity to iterate using more advanced techniques (e.g., ensemble methods like Random Forest or XGBoost) to better detect the minority class of actual defaulters.
+📈 Feature Importance (Interpretation)
+🔥 Features Increasing Default Risk
+PAY_1 through PAY_6 (repayment delays)
 
-Tools Used
-Python 3
-NumPy, Pandas (Data Manipulation)
-Scikit-learn (ML Pipeline, Preprocessing, Modeling)
-Matplotlib, Seaborn (Visualization)
-🔬 Model Evaluation & Results
-The model's performance was measured on the unseen test set, focusing heavily on Recall for the minority (Default) class, as missing a defaulter is the most costly error for the bank.
+❄ Features Decreasing Default Risk
+LIMIT_BAL
+PAY_AMT*
+These coefficients help identify behavioral patterns linked to financial risk.
+
+🔑 Technologies Used
+Python
+Pandas (Data Manipulation)
+NumPy (Numerical Operations)
+Scikit-learn (Pipelines, Models, Preprocessing)
+Matplotlib & Seaborn (Visualization)
+Jupyter / Google Colab (Development Environment)
